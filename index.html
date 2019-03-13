@@ -38,9 +38,9 @@
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">记录查询</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" lay-id="l1">DNS记录</a></dd>
-                        <dd><a href="javascript:;" lay-id="l2">HTTP记录</a></dd>
-                        <dd><a href="javascript:;" lay-id="l3">TCP记录</a></dd>
+                        <dd><a href="javascript:;">DNS记录</a></dd>
+                        <dd><a href="javascript:;">HTTP记录</a></dd>
+                        <dd><a href="javascript:;">TCP记录</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;">API</a></li>
@@ -58,6 +58,10 @@
     </div>
 </div>
 <script>
+    layui.use(['table','element','jquery','laydate'],function () {
+        var element = layui.element;
+        var $ = layui.jquery;
+    });
 </script>
 </body>
 </html>

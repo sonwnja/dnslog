@@ -15,6 +15,18 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo">DNSLog平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-left" lay-filter="manage">
+            <li class="layui-nav-item"><a href="javascript:;" lay-id="1" class="manage">控制面板</a></li>
+            <li class="layui-nav-item">
+                <a href="javascript:;">其它系统</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;">邮件管理</a></dd>
+                    <dd><a href="javascript:;">消息管理</a></dd>
+                    <dd><a href="javascript:;">授权管理</a></dd>
+                </dl>
+            </li>
+        </ul>
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
@@ -22,11 +34,10 @@
                     DNSLog
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">基本资料</a></dd>
-                    <dd><a href="javascript:;">安全设置</a></dd>
+                    <dd><a href="javascript:;">基本信息</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="/logout">退出</a></li>
+            <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
         </ul>
     </div>
 
@@ -34,13 +45,12 @@
         <div class="layui-side-scroll">
             <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
             <ul class="layui-nav layui-nav-tree" lay-filter="tab-switch">
-                <li class="layui-nav-item"><a href="javascript:;">个人信息</a></li>
                 <li class="layui-nav-item layui-nav-itemed">
                     <a class="" href="javascript:;">记录查询</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;">DNS记录</a></dd>
-                        <dd><a href="javascript:;">HTTP记录</a></dd>
-                        <dd><a href="javascript:;">TCP记录</a></dd>
+                        <dd><a href="javascript:;" lay-id="l1">DNS记录</a></dd>
+                        <dd><a href="javascript:;" lay-id="l2">HTTP记录</a></dd>
+                        <dd><a href="javascript:;" lay-id="l3">TCP记录</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item"><a href="javascript:;">API</a></li>
@@ -50,18 +60,508 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
+        <div class="layui-tab" lay-allowClose="true" lay-filter="tab-title">
+            <ul class="layui-tab-title" id="laytab">
+                <li class="layui-this" lay-id="l1" id="d1">DNS记录</li>
+                <li lay-id="l2" id="h1">HTTP记录</li>
+                <li lay-id="l3" id="t1">TCP记录</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div id="dns-tab" class="layui-tab-item layui-show">
+                    <table id="dns-tab-content" class="layui-hide" lay-filter="dns"></table>
+                </div>
+                <div id="http-tab" class="layui-tab-item">
+                    <table id="http-tab-content" class="layui-hide" lay-filter="http"></table>
+                </div>
+                <div id="tcp-tab" class="layui-tab-item">
+                    <table id="tcp-tab-content" class="layui-hide" lay-filter="tcp"></table>
+                </div>
+            </div>
+        </div>
 
     </div>
 
     <div class="layui-footer">
+        <!-- 底部固定区域 -->
         © return.cf - 底部固定区域
     </div>
 </div>
+
+<script type="text/html" id="toolbar1">
+    <div class="layui-inline" style="float: left;">
+        <input class="layui-input" style="height: 30px;" name="query" id="dnsReload" autocomplete="off" placeholder="请输入内容...">
+    </div>
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" id="dnsContent" data-type="reload">
+            <i class="layui-icon"></i>搜索
+        </button>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar2">
+    <div class="layui-inline" style="float: left;">
+        <input class="layui-input" style="height: 30px;" name="query" id="httpReload" autocomplete="off"
+               placeholder="请输入内容...">
+    </div>
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-bg-blue" id="httpContent" data-type="reload">
+            <i class="layui-icon"></i>搜索
+        </button>
+    </div>
+</script>
+
+<script type="text/html" id="toolbar3">
+    <div class="layui-inline" style="float: left;">
+        <input class="layui-input" style="height: 30px;" name="query" id="tcpReload" autocomplete="off"
+               placeholder="请输入内容...">
+    </div>
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm layui-bg-cyan" id="tcpContent" data-type="reload">
+            <i class="layui-icon"></i>搜索
+        </button>
+    </div>
+</script>
+
+<script type="text/html" id="dnsAction">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="httpAction">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script type="text/html" id="tcpAction">
+    <a class="layui-btn layui-btn-xs" lay-event="view">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
 <script>
-    layui.use(['table','element','jquery','laydate'],function () {
+    layui.use(['table','element','jquery'], function () {
         var element = layui.element;
         var $ = layui.jquery;
+        var table1 = layui.table;
+        var table2 = layui.table;
+        var table3 = layui.table;
+
+        //第一个实例
+        table1.render({
+            elem: '#dns-tab-content'
+            , height: 'full-250'
+            , cellMinWidth: 100
+            //,limit: 30
+            , toolbar: '#toolbar1'
+            , id: 'dnseditor'
+            , method: 'POST'
+            , url: 'dns' //数据接口
+            , page: true //开启分页
+            , limits: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200]
+            , title: 'DNS查询记录信息'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: '序号', width: 80, sort: true, fixed: 'left'}
+                , {field: 'content', title: '查询内容', edit: 'text'}
+                , {field: 'remote_addr', title: '请求来源', sort: true, edit: 'text'}
+                , {field: 'date', title: '请求时间', edit: 'text'}
+                , {fixed: 'right', title: '操作', toolbar: '#userAction', width: 120}
+            ]]
+
+        });
+
+        //表格无条件重载
+        function table_reload(table_name,reload_id,reload_url){
+            table_name.reload(reload_id, {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , url: reload_url
+            });
+        }
+
+        //表格查询按条件重载
+        function getquery(tablename,id,v,url){
+                       tablename.reload(id, {
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                            , method: 'POST'
+                            , url: url
+                            , where: {
+                                v: v
+                            }
+                            ,parseData: function (response) {
+                                if(response['count']==0){
+                                   layer.alert(response['data']);
+                                   return {
+                                       "code": response['code'],
+                                   }
+                                }
+                            }
+                        });
+
+
+        }
+
+        //监听行工具事件
+        table1.on('tool(dns-tab-content)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('删除需谨慎', function (index) {
+                    var id = data.id;
+                    obj.del();
+                    $.post(
+                        'dnsdel',
+                        {
+                            id: id
+                        },
+                        function (res,status) {
+                            if (res['msg'] == "success" && status == "success") {
+                                layer.confirm(res['data']);
+                                //table_reload(table1,'editor','user');
+                            }
+                        }
+                    );
+                    layer.close(index);
+                });
+            } else if (obj.event === 'view') {
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听单元格编辑
+        table1.on('edit(dns-tab-content)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.confirm('确定修改吗', function (index) {
+                $.post(
+                    "dnsupdate",
+                    {
+                        id: data.id,
+                        f: field,
+                        v: value,
+                    },
+                    function (res, status) {
+                        if (res['code'] == 0 && status == "success") {
+                            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+                        }
+                    }
+                );
+                layer.close(index);
+            });
+
+        });
+
+        //监听搜索
+        var active1 = {
+            reload: function () {
+                //alert(JSON.stringify(data));
+                var query = $('#dnsReload').val();
+                var queryData = filterXSS(query);
+                if (queryData == "") {
+                    layer.msg("请输入搜索内容");
+                    table_reload(table1,'dnseditor','dns');
+                } else {
+                   getquery(table1,'dnseditor',queryData,'dnsquery');
+                   layer.msg(queryData);
+                }
+                $('#dnsReload').attr("value",queryData);
+            }
+        };
+        $(document).on('click', '#dnsContent', function () {
+            var type1 = $(this).data('type');
+            active1[type1] ? active1[type1].call(this) : '';
+        });
+
+        //第二个实例
+        table2.render({
+            elem: '#http-tab-content'
+            , height: 'full-250'
+            //, cellMinWidth: 100
+            //,limit: 30
+            , toolbar: '#toolbar2'
+            , id: 'httpeditor'
+            , method: 'POST'
+            , url: 'http' //数据接口
+            , page: true //开启分页
+            , limits: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200]
+            , title: 'http请求信息'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: '序号', width: 80, sort: true, fixed: 'left'}
+                , {field: 'uri', title: '请求地址', edit: 'text'}
+                , {field: 'method', title: '请求类型', sort: true, edit: 'text'}
+                , {field: 'body', title: 'POST数据', sort: true, edit: 'text'}
+                , {field: 'ua', title: 'User-Agent', sort: true, edit: 'text'}
+                , {field: 'host', title: '请求来源', sort: true, edit: 'text'}
+                , {field: 'date', title: '请求时间', sort: true, edit: 'text'}
+                , {fixed: 'right', title: '操作', toolbar: '#httpAction', width: 120}
+            ]]
+        });
+
+        //监听行工具事件
+        table2.on('tool(http-tab-content)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('删除需谨慎', function (index) {
+                    var id = data.id;
+                    obj.del();
+                    $.post(
+                        'httpdel',
+                        {
+                            id: id
+                        },
+                        function (res,status) {
+                            if (res['msg'] == "success" && status == "success") {
+                                layer.confirm(res['data']);
+                                //table_reload(table2,'geditor','gather');
+                            }
+                        }
+                    );
+                    layer.close(index);
+                });
+            } else if (obj.event === 'view') {
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听单元格编辑
+        table2.on('edit(http-tab-content)', function (obj) {
+            var value = filterXSS(obj.value) //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.confirm('确定修改吗', function (index) {
+                $.post(
+                    "httpupdate",
+                    {
+                        id: data.id,
+                        f: field,
+                        v: value,
+                    },
+                    function (res, status) {
+                        if (res['code'] == 0 && status == "success") {
+                            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+                        }
+                    }
+                );
+                layer.close(index);
+            });
+
+        });
+
+        //监听搜索
+        var active2 = {
+            reload: function () {
+                //alert(JSON.stringify(data));
+                var query = $('#httpReload').val();
+                var queryData = filterXSS(query);
+                if (queryData == "") {
+                    layer.msg("请输入搜索内容");
+                    table_reload(table2,'httpeditor','http');
+                } else {
+                    getquery(table2,'httpeditor',queryData,'httpquery');
+                    layer.msg(queryData);
+                }
+                $('#httpReload').attr("value",queryData);
+            }
+        };
+
+        $(document).on('click', '#httpContent', function () {
+            var type2 = $(this).data('type');
+            active2[type2] ? active2[type2].call(this) : '';
+        });
+
+        //第三个实例
+        table3.render({
+            elem: '#tcp-tab-content'
+            , height: 'full-250'
+            //, cellMinWidth: 100
+            //,limit: 30
+            , toolbar: '#toolbar3'
+            , id: 'tcpeditor'
+            , method: 'POST'
+            , url: 'tcp' //数据接口
+            , page: true //开启分页
+            , limits: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200]
+            , title: 'tcp请求信息'
+            , cols: [[ //表头
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: '序号', width: 80, sort: true, fixed: 'left'}
+                , {field: 'content', title: '请求内容', edit: 'text'}
+                , {field: 'remote_addr', title: '请求来源', sort: true, edit: 'text'}
+                , {field: 'date', title: '请求时间', edit: 'text'}
+                , {fixed: 'right', title: '操作', toolbar: '#userAction', width: 120}
+            ]]
+        });
+
+        //监听行工具事件
+        table3.on('tool(tcp-tab-content)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('删除需谨慎', function (index) {
+                    var id = data.id;
+                    obj.del();
+                    $.post(
+                        'tcpdel',
+                        {
+                            id: id,
+                        },
+                        function (res,status) {
+                            if (res['msg'] == "success" && status == "success") {
+                                layer.confirm(res['data']);
+                                // table_reload(table3,'seditor','scan');
+                            }
+                        }
+                    );
+                    layer.close(index);
+                });
+            } else if (obj.event === 'view') {
+                layer.alert(JSON.stringify(data));
+            }
+        });
+
+        //监听单元格编辑
+        table3.on('edit(tcp-tab-content)', function (obj) {
+            var value = filterXSS(obj.value) //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            layer.confirm('确定修改吗', function (index) {
+                $.post(
+                    "tcpupdate",
+                    {
+                        id: data.id,
+                        f: field,
+                        v: value,
+                    },
+                    function (res, status) {
+                        if (res['code'] == 0 && status == "success") {
+                            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+                        }
+                    }
+                );
+                layer.close(index);
+            });
+
+        });
+
+        //监听搜索
+        var active3 = {
+            reload: function () {
+                //alert(JSON.stringify(data));
+                var query = $('#tcpReload').val();
+                var queryData = filterXSS(query);
+                if (queryData == "") {
+                    layer.msg("请输入UID");
+                    table_reload(table3,'tcpeditor','tcp');
+                } else {
+                    getquery(table3,'tcpeditor',queryData,'tcpquery');
+                    layer.msg(queryData);
+                }
+                $('#tcpReload').attr("value",queryData);
+            }
+        };
+        $(document).on('click', '#tcpContent', function () {
+            var type3 = $(this).data('type');
+            active3[type3] ? active3[type3].call(this) : '';
+        });
+
+
+
+        var tab = $("#laytab");
+        var dnstab = $("#d1");
+        var httptab = $("#h1");
+        var tcptab = $("#t1");
+        var tabcontent = $(".layui-tab-content");
+        var dnstable = $("#dns-tab");
+        var httptable = $("#http-tab");
+        var tcptable = $("#tcp-tab");
+
+        //监听tab选项卡删除事件
+        $(".layui-tab").on("click",function(e){
+
+            if($(e.target).is(".layui-tab-close")){
+                var tid=$(e.target).parent().attr("lay-id");
+                layer.msg(tid);
+                switch(tid){
+                    case "l1":
+                        $("#d1").remove();
+                        $("#dns-tab").remove();
+                        break;
+                    case "l2":
+                        $("#h1").remove();
+                        $("#http-tab").remove();
+                        break;
+                    case "l3":
+                        $("#t1").remove();
+                        $("#tcp-tab").remove();
+                        break;
+                }
+            }
+        });
+
+        //监听左侧导航栏事件
+        element.on('nav(tab-switch)', function (elem) {
+            var lid = elem.attr('lay-id');
+            element.tabChange('tab-title', lid);
+            switch(lid){
+                case "l1":
+                    var exist = $("#d1").length;
+                    if (exist == 0) {
+                        $("#laytab").attr("class","layui-tab-title");
+                        tab.prepend(dnstab);
+                        tabcontent.prepend(dnstable);
+
+                        $("#d1").attr("class","layui-this");
+                        $("#dns-tab").attr("class","layui-tab-item layui-show");
+                        $("#h1").attr("class","");
+                        $("#http-tab").attr("class","layui-tab-item");
+                        $("#t1").attr("class","");
+                        $("#tcp-tab").attr("class","layui-tab-item");
+                        table_reload(table1,'dnseditor','dns');
+                    }
+                    break;
+                case "l2":
+                    var exist = $("#h1").length;
+                    if (exist == 0) {
+                        $("#laytab").attr("class","layui-tab-title");
+                        tab.prepend(httptab);
+                        tabcontent.prepend(httptable);
+
+                        $("#h1").attr("class","layui-this");
+                        $("#http-tab").attr("class","layui-tab-item layui-show");
+                        $("#d1").attr("class","");
+                        $("#dns-tab").attr("class","layui-tab-item");
+                        $("#t1").attr("class","");
+                        $("#tcp-tab").attr("class","layui-tab-item");
+                        table_reload(table2,'httpeditor','http');
+                    }
+                    break;
+                case "l3":
+                    var exist = $("#t1").length;
+                    if (exist == 0) {
+                        $("#laytab").attr("class","layui-tab-title");
+                        tab.prepend(tcptab);
+                        tabcontent.prepend(tcptable);
+
+                        $("#t1").attr("class","layui-this");
+                        $("#tcp-tab").attr("class","layui-tab-item layui-show");
+                        $("#d1").attr("class","");
+                        $("#dns-tab").attr("class","layui-tab-item");
+                        $("#h1").attr("class","");
+                        $("#http-tab").attr("class","layui-tab-item");
+                        table_reload(table3,'tcpeditor','tcp');
+                    }
+            }
+        });
+
+        $(document).on('mouseenter','td',function(){
+                var text = $(this).text();
+                $(this).attr("title",text);
+        });
+
     });
+
 </script>
 </body>
 </html>

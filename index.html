@@ -17,7 +17,7 @@
         <div class="layui-logo">DNSLog平台</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left" lay-filter="manage">
-            <li class="layui-nav-item"><a href="javascript:;" lay-id="1" class="manage">控制面板</a></li>
+            <li class="layui-nav-item"><a href="javascript:;" lay-id="1" class="dashboard">控制面板</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">其它系统</a>
                 <dl class="layui-nav-child">
@@ -34,7 +34,7 @@
                     DNSLog
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;">基本信息</a></dd>
+                    <dd><a href="javascript:;" id="profile_info">基本信息</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
@@ -76,6 +76,29 @@
                 <div id="tcp-tab" class="layui-tab-item">
                     <table id="tcp-tab-content" class="layui-hide" lay-filter="tcp"></table>
                 </div>
+            </div>
+        </div>
+
+        <div id="profile" class="layui-collapse layui-hide">
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">用户名</h2>
+                <div class="layui-colla-content layui-show">内容区域</div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">邮箱</h2>
+                <div class="layui-colla-content layui-show">内容区域</div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">手机号</h2>
+                <div class="layui-colla-content layui-show">内容区域</div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">分配的域名</h2>
+                <div class="layui-colla-content layui-show">内容区域</div>
+            </div>
+            <div class="layui-colla-item">
+                <h2 class="layui-colla-title">API KEY</h2>
+                <div class="layui-colla-content layui-show">内容区域</div>
             </div>
         </div>
 
@@ -558,6 +581,16 @@
         $(document).on('mouseenter','td',function(){
                 var text = $(this).text();
                 $(this).attr("title",text);
+        });
+
+        $(document).on("click",'#profile_info',function () {
+            $(".layui-tab").addClass("layui-hide");
+            $("#profile").removeClass("layui-hide").addClass("layui-show");
+        });
+
+        $(document).on("click",'.dashboard',function () {
+            $("#profile").removeClass("layui-show").addClass("layui-hide");
+            $(".layui-tab").removeClass("layui-hide");
         });
 
     });

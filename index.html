@@ -91,20 +91,20 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label" >手机号</label>
+                                <label class="layui-form-label" >邮箱</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" name="useremail" required lay-verify="required" placeholder="输入手机号..." autocomplete="off" class="layui-input">
+                                    <input type="text" name="useremail" required lay-verify="required" placeholder="输入手机号..." autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" >验证码</label>
                                 <div class="layui-input-inline">
-                                    <input style="width: 57%;display: inline;" type="text" name="smcode" required lay-verify="required" placeholder="短信验证码..." autocomplete="off" class="layui-input">
+                                    <input style="width: 57%;display: inline;" type="text" name="emailcode" required lay-verify="required" placeholder="邮箱验证码..." autocomplete="off" class="layui-input">
                                     <button style="font-size: 8px;" class="layui-btn layui-btn-primary" lay-filter="send" lay-submit>重新发送</button>
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <button class="layui-btn layui-btn-normal" lay-filter="login" lay-submit>立即注册</button>
+                                <button class="layui-btn layui-btn-normal" lay-filter="register" lay-submit>立即注册</button>
                                 <div class="layui-inline" style="padding-top: 25px;">
                                     <a href="#" style="text-decoration-line: underline">已有账号?</a>
                                 </div>
@@ -117,14 +117,16 @@
 </div>
 
 <div class="layui-footer" style="margin-left: 42%;margin-top: 5%;">
-    <p>2019 &copy; <a href="https://www.aliyun.com/product/sos" target="_blank">RETURN.CF 出品</a></p>
+    <p>2019 &copy; <a href="#" target="_blank">RETURN.CF 出品</a></p>
 </div>
 
 <script>
     layui.use(['form','jquery','element'], function () {
-        var form = layui.form;
+        var form1 = layui.form;
+        var form2 = layui.form;
+        var form3 = layui.form;
         var $ = layui.jquery;
-        form.on('submit(login)', function (data) {
+        form1.on('submit(login)', function (data) {
             $.post(
                 "loginauth",
                 {
@@ -147,6 +149,55 @@
             );
             return false;
         });
+
+        form2.on('submit(register)', function (data) {
+            $.post(
+                "reg",
+                {
+                    user: filterXSS(data.field.username),
+                    pass1: data.field.userpass1,
+                    pass2: data.field.userpass2,
+                    email: data.field.useremail,
+                    code: data.field.emailcode,
+                },
+                function(res,status){
+                    if (status == "success" && res['code'] == 0) {
+                        window.location.replace(res['url']);
+                    }else{
+                        layer.open({
+                            content: res['data'],
+                            end: function(){
+                                changeCaptcha();
+                            }
+                        });
+                    }
+                }
+            );
+            return false;
+        });
+
+        form3.on('submit(send)', function (data) {
+            $.post(
+                "send",
+                {
+                    email: data.field.useremail,
+                },
+                function(res,status){
+                    if (status == "success" && res['code'] == 0) {
+                        layer.open({
+                            content: res['data'],
+                        });
+                        layer.close();
+                    }else{
+                        layer.open({
+                            content: res['data'],
+                        });
+                    }
+                }
+            );
+            return false;
+        });
+
     });
     function changeCaptcha() {
         layui.use('jquery',function () {

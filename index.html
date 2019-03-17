@@ -32,11 +32,11 @@
 
     <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title">
-                <li class="layui-this">用户登录</li>
-                <li>用户注册</li>
+                <li id="form1-tab" class="layui-this">用户登录</li>
+                <li id="form2-tab" >用户注册</li>
             </ul>
             <div class="layui-form layui-tab-content" style="padding: 20px 0;">
-                <div class="layui-tab-item layui-show">
+                <div id="form1" class="layui-tab-item layui-show">
                     <div class="layui-form layui-form-pane">
                         <form>
                             <div class="layui-form-item">
@@ -63,13 +63,13 @@
                             <div class="layui-form-item">
                                 <button class="layui-btn" lay-filter="login" lay-submit>立即登录</button>
                                 <div class="layui-inline" style="padding-top: 25px;">
-                                    <a href="#" style="text-decoration-line: underline;">忘记密码?</a>
+                                    <a id="exist1" href="#" style="text-decoration-line: underline;">忘记密码?</a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="layui-tab-item">
+                <div id="form2" class="layui-tab-item">
                     <div class="layui-form layui-form-pane">
                         <form>
                             <div class="layui-form-item">
@@ -106,7 +106,7 @@
                             <div class="layui-form-item">
                                 <button class="layui-btn layui-btn-normal" lay-filter="register" lay-submit>立即注册</button>
                                 <div class="layui-inline" style="padding-top: 25px;">
-                                    <a href="#" style="text-decoration-line: underline">已有账号?</a>
+                                    <a id="exist2" href="#" style="text-decoration-line: underline">已有账号?</a>
                                 </div>
                             </div>
                         </form>
@@ -196,6 +196,17 @@
                 }
             );
             return false;
+        });
+
+        $(document).on("click",'#exist1',function () {
+            window.location.replace("forget.html");
+        });
+
+        $(document).on("click",'#exist2',function () {
+            $("#form1").attr("class","layui-tab-item layui-show");
+            $("#form1-tab").attr("class","layui-this");
+            $("#form2").attr("class","layui-tab-item");
+            $("#form2-tab").attr("class","");
         });
 
     });

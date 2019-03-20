@@ -29,10 +29,9 @@
 </div>
 
 <div class="layui-container" style="margin-left: 35%;margin-top: 5%;">
-
     <div class="layui-tab layui-tab-brief" lay-filter="user">
             <ul class="layui-tab-title">
-                <li class="layui-this">密码重置</li>
+                <li class="layui-this">用户注册</li>
             </ul>
             <div class="layui-form layui-tab-content" style="padding: 20px 0;">
                 <div class="layui-tab-item layui-show">
@@ -45,41 +44,41 @@
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <label class="layui-form-label">新密码</label>
+                                <label class="layui-form-label">密码</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" name="userpass1" required lay-verify="pass" placeholder="输入新密码..." autocomplete="off" class="layui-input">
+                                    <input type="password" name="userpass1" required lay-verify="pass" placeholder="输入密码..." autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label">再次输入</label>
                                 <div class="layui-input-inline">
-                                    <input type="password" name="userpass2" required lay-verify="pass|repass" placeholder="再次输入新密码..." autocomplete="off" class="layui-input">
+                                    <input type="password" name="userpass2" required lay-verify="pass|repass" placeholder="再次输入密码..." autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" >邮箱</label>
                                 <div class="layui-input-inline">
-                                    <input type="text" name="useremail" required lay-verify="email" placeholder="注册时的邮箱..." autocomplete="off" class="layui-input">
+                                    <input type="text" name="useremail" required lay-verify="email" placeholder="输入邮箱..." autocomplete="off" class="layui-input">
                                 </div>
                             </div>
                             <div class="layui-form-item">
                                 <label class="layui-form-label" >验证码</label>
                                 <div class="layui-input-inline">
-                                    <input style="width: 52%;display: inline;" type="text" name="emailcode" required lay-verify="" placeholder="邮箱验证码..." autocomplete="off" class="layui-input">
+                                    <input style="width: 52%;display: inline;" type="text" id="emailcode" name="emailcode" required lay-verify="" placeholder="邮箱验证码..." autocomplete="off" class="layui-input">
                                     <button style="font-size: 10px;" class="layui-btn layui-btn-green" id="send" lay-filter="send" lay-submit>获取验证码</button>
                                 </div>
                             </div>
                             <div class="layui-form-item">
-                                <button class="layui-btn layui-btn-warm" lay-filter="findpwd" lay-submit>立即重置</button>
+                                <button class="layui-btn layui-btn-normal" lay-filter="register" lay-submit>立即注册</button>
                                 <div class="layui-inline" style="padding-top: 25px;">
-                                    <a id="giveup" href="#" style="text-decoration-line: underline;">放弃重置?</a>
+                                    <a id="exist" href="#" style="text-decoration-line: underline">已有账号?</a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-        </div>
+    </div>
 </div>
 
 <div class="layui-footer" style="margin-left: 42%;margin-top: 5%;">
@@ -87,7 +86,7 @@
 </div>
 
 <script>
-    //加载并使用form、jquery和element组件
+    //加载使用form、jquery和element组件
     layui.use(['form','jquery','element'], function () {
         var form1 = layui.form;
         var form2 = layui.form;
@@ -121,39 +120,8 @@
             }
         });
 
-        //监听表单密码重置提交动作
-        form1.on('submit(findpwd)', function (data) {
-
-            //发请求
-            $.post(
-                //请求的url
-                "resetpwd",
-                //post提交的数据
-                {
-                    user: filterXSS(data.field.username),
-                    pass1: data.field.userpass1,
-                    pass2: data.field.userpass2,
-                    email: data.field.useremail,
-                    code: data.field.emailcode,
-                },
-                //回调处理，判断返回的数据是成功还是失败
-                function(res,status){
-                    if (status == "success" && res['code'] == 0) {
-                        window.location.replace(res['url']);
-                    }else{
-                        layer.open({
-                            content: res['data'],
-                            end: function(){
-                                changeCaptcha();
-                            }
-                        });
-                    }
-                }
-            );
-            return false;
-        });
-        //监听表单邮件发送动作
-        form2.on('submit(send)', function (data) {
+        //监听邮件发送
+        form1.on('submit(send)', function (data) {
             time();
             //发请求
             $.post(
@@ -179,9 +147,41 @@
             );
             return false;
         });
+        //监听表单注册提交
+        form2.on('submit(register)', function (data) {
+            //让验证码字段属性变为required
+            //("#emailcode").attr("lay-verify","required");
+            //发请求
+            $.post(
+                //请求的url
+                "reg",
+                //post提交的数据
+                {
+                    user: filterXSS(data.field.username),
+                    pass1: data.field.userpass1,
+                    pass2: data.field.userpass2,
+                    email: data.field.useremail,
+                    code: data.field.emailcode,
+                },
+                //回调处理，判断返回的数据是成功还是失败
+                function(res,status){
+                    if (status == "success" && res['code'] == 0) {
+                        window.location.replace(res['url']);
+                    }else{
+                        layer.open({
+                            content: res['data'],
+                            end: function(){
+                                changeCaptcha();
+                            }
+                        });
+                    }
+                }
+            );
+            return false;
+        });
 
-        //放弃重置点击事件处理
-        $(document).on("click",'#giveup',function () {
+        //已有账号点击事件处理
+        $(document).on("click",'#exist',function () {
             window.location.replace("login.html");
         });
 

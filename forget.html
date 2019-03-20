@@ -84,18 +84,24 @@
 </div>
 
 <script>
+    //加载并使用form、jquery和element组件
     layui.use(['form','jquery','element'], function () {
         var form1 = layui.form;
         var form2 = layui.form;
         var $ = layui.jquery;
+        //监听表单密码重置提交动作
         form1.on('submit(findpwd)', function (data) {
+            //发请求
             $.post(
+                //请求的url
                 "restpwd",
+                //post提交的数据
                 {
                     user: filterXSS(data.field.username),
                     pass: data.field.userpass,
                     vercode: filterXSS(data.field.vercode),
                 },
+                //回调处理，判断返回的数据是成功还是失败
                 function(res,status){
                     if (status == "success" && res['code'] == 0) {
                         window.location.replace(res['url']);
@@ -111,12 +117,17 @@
             );
             return false;
         });
+        //监听表单邮件发送动作
         form2.on('submit(send)', function (data) {
+            //发请求
             $.post(
+                //请求的url
                 "send",
+                //post提交的数据
                 {
                     email: data.field.useremail,
                 },
+                //回调处理，判断返回的数据是成功还是失败
                 function(res,status){
                     if (status == "success" && res['code'] == 0) {
                         layer.open({

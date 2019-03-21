@@ -114,7 +114,7 @@
             ]
             ,repass: function(value,item){
                 //校验2次密码是否一致
-                if(value!=$("input[name='userpass1']").value){
+                if(value!=$("input[name='userpass1']").val()){
                     return "2次密码不一致"
                 }
             }

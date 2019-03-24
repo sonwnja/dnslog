@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1,firefox=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>dnslog平台</title>
+    <link rel="icon" href="img/htlog.jpg" type="image/x-icon"/>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <script src="layui/layui.js"></script>
+    <script src="layui/css.js"></script>
+    <style>
+        html,body,h1,h2,h3,h4,h5,h6,p,ul,ol,li,dl,dt,dd,th,td,form,object,iframe,blockquote,pre,a,abbr,address,code,img,fieldset,form,label{margin:0;padding:0;}
+        li {
+            list-style-type: none;
+            padding: 0 16px;
+            float: left;
+        }
+        li:hover {
+            /*background-color: #333333;*/
+            background-color: #009f95;
+            cursor: pointer;
+            font-weight: bolder;
+        }
+        ul {
+            float: right;
+            line-height: 50px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div style="background-color: #555555;height: 50px;width: 100%;color: white;">
+    <ul>
+        <li id="l1">游客</li>
+        <li id="l2">登录</li>
+        <li id="l3">注册</li>
+    </ul>
+</div>
+<div style="background-color: #333333;height: 150px;width: 100%;color: white;text-align: center;">
+    <div style="text-align: center;padding-top: 50px;font-size: 15px;color: lightseagreen">
+    惊讶!!!？明明有漏洞，为什么没有显示呢？难道漏洞根本不存在？被安全设备或者安全应用给吃掉了？不用苦恼，你可以尝试一下<span style="color: red;">DNSLog</span>回显。
+    </div>
+</div>
+<div style="background-color: white;height: 530px;width: 100%;color: white;text-align: center;padding-top: 50px;">
+<img src="img/dnsloginjec.png">
+</div>
+<div class="layui-footer" style="margin-left: 42%;margin-top: 5%;">
+    <p>2019 &copy; <a href="#" target="_blank">RETURN.CF 出品</a></p>
+</div>
+</body>
+<script>
+    layui.use('jquery',function () {
+        var $ = layui.jquery;
+        $("#l1").click(function () {
+            var vid = 1;
+            $.post(
+                "vist"
+                ,{
+                    'vid': filterXSS(vid),
+                },
+                //回调处理，判断返回的数据是成功还是失败
+                function(res,status){
+                    if (status == "success" && res['code'] == 0) {
+                        layer.open({
+                            content: res['data'],
+                        });
+                        layer.close();
+                    }else{
+                        layer.open({
+                            content: res['data'],
+                        });
+                    }
+                }
+            );
+        });
+        $("#l2").click(function () {
+            window.location.replace("login.html");
+        });
+        $("#l3").click(function () {
+            window.location.replace("reg.html");
+        });
+    });
+</script>
+</html>
+A

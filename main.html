@@ -423,8 +423,10 @@
             , cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'id', title: '序号', width: 80, sort: true, fixed: 'left'}
+                , {field: 'src_addr', title: '源IP', sort: true, edit: 'text'}
+                , {field: 'src_port', title: '源端口', sort: true, edit: 'text'}
+                , {field: 'dst_addr', title: '请求目标', edit: 'text'}
                 , {field: 'content', title: '请求内容', edit: 'text'}
-                , {field: 'remote_addr', title: '请求来源', sort: true, edit: 'text'}
                 , {field: 'date', title: '请求时间', edit: 'text'}
                 , {fixed: 'right', title: '操作', toolbar: '#tcpAction', width: 120}
             ]]

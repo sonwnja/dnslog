@@ -55,18 +55,13 @@
     layui.use('jquery',function () {
         var $ = layui.jquery;
         $("#l1").click(function () {
-            var vid = 1;
             $.post(
                 "vist"
-                ,{
-                    'vid': filterXSS(vid),
-                },
+                ,
                 //回调处理，判断返回的数据是成功还是失败
                 function(res,status){
                     if (status == "success" && res['code'] == 0) {
-                        layer.open({
-                            content: res['data'],
-                        });
+                        window.location.replace(res['url']);
                         layer.close();
                     }else{
                         layer.open({
@@ -84,5 +79,7 @@
         });
     });
 </script>
+
+
 </html>
 A

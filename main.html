@@ -34,7 +34,7 @@
                     DNSLog
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="javascript:;" id="profile_info">基本信息</a></dd>
+                    <dd><a href="javascript:;" id="profile_info">用户信息</a></dd>
                 </dl>
             </li>
             <li class="layui-nav-item"><a href="javascript:;">退出</a></li>
@@ -60,6 +60,14 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
+        <!--面包屑页面-->
+        <div lay-filter="bread" style="padding: 10px 10px;">
+            <span class="layui-breadcrumb" lay-separator=">">
+              <a href="">DNSLog平台</a>
+              <a><cite id="cite">用户信息</cite></a>
+            </span>
+        </div>
+        <!--表格页面-->
         <div class="layui-tab layui-hide" lay-allowClose="true" lay-filter="tab-title">
             <ul class="layui-tab-title" id="laytab">
                 <li class="layui-this" lay-id="l1" id="d1">DNS记录</li>
@@ -78,39 +86,39 @@
                 </div>
             </div>
         </div>
-
+        <!--用户信息页面-->
         <div id="profile" class="layui-collapse layui-show">
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">
                     <i class="layui-icon layui-icon-username"></i>用户名
                 </h2>
-                <div class="layui-colla-content layui-show">
-                    内容区域
+                <div class="layui-colla-content layui-show" th:text="${name}">
+                    loading...
                 </div>
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">
-                    <i class="layui-icon layui-icon-component"></i>邮箱
+                    <i class="layui-icon layui-icon-component"></i>用户邮箱
                 </h2>
-                <div class="layui-colla-content layui-show">内容区域</div>
+                <div class="layui-colla-content layui-show" th:text="${email}">loading...</div>
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">
-                    <i class="layui-icon layui-icon-cellphone"></i>手机号
+                    <i class="layui-icon layui-icon-senior"></i>用户级别
                 </h2>
-                <div class="layui-colla-content layui-show">内容区域</div>
+                <div class="layui-colla-content layui-show" th:text="${senior}">loading...</div>
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">
-                    <i class="layui-icon layui-icon-website"></i>分配的域名
+                    <i class="layui-icon layui-icon-website"></i>根域名
                 </h2>
-                <div class="layui-colla-content layui-show">内容区域</div>
+                <div class="layui-colla-content layui-show" th:text="${nsname}">loading...</div>
             </div>
             <div class="layui-colla-item">
                 <h2 class="layui-colla-title">
                     <i class="layui-icon layui-icon-auz"></i>API KEY
                 </h2>
-                <div class="layui-colla-content layui-show">内容区域</div>
+                <div class="layui-colla-content layui-show" th:text="${ak}">loading...</div>
             </div>
         </div>
 
@@ -197,7 +205,7 @@
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'id', title: '序号', width: 80, sort: true, fixed: 'left'}
                 , {field: 'content', title: '查询内容', edit: 'text'}
-                , {field: 'remote_addr', title: '请求来源', sort: true, edit: 'text'}
+                , {field: 'src_addr', title: '请求来源', sort: true, edit: 'text'}
                 , {field: 'date', title: '请求时间', edit: 'text'}
                 , {fixed: 'right', title: '操作', toolbar: '#dnsAction', width: 120}
             ]]
@@ -329,7 +337,7 @@
                 , {field: 'method', title: '请求类型', sort: true, edit: 'text'}
                 , {field: 'body', title: 'POST数据', sort: true, edit: 'text'}
                 , {field: 'ua', title: 'User-Agent', sort: true, edit: 'text'}
-                , {field: 'host', title: '请求来源', sort: true, edit: 'text'}
+                , {field: 'src_addr', title: '请求来源', sort: true, edit: 'text'}
                 , {field: 'date', title: '请求时间', sort: true, edit: 'text'}
                 , {fixed: 'right', title: '操作', toolbar: '#httpAction', width: 120}
             ]]
@@ -546,6 +554,7 @@
                     var exist = $("#d1").length;
                     $("#profile").removeClass("layui-show").addClass("layui-hide");
                     $(".layui-tab").removeClass("layui-hide");
+                    $("#cite")[0].innerText="DNS记录";
                     if (exist == 0) {
                         $("#laytab").attr("class","layui-tab-title");
                         tab.prepend(dnstab);
@@ -563,6 +572,7 @@
                 case "l2":
                     $("#profile").removeClass("layui-show").addClass("layui-hide");
                     $(".layui-tab").removeClass("layui-hide");
+                    $("#cite")[0].innerText="HTTP记录";
                     var exist = $("#h1").length;
                     if (exist == 0) {
                         $("#laytab").attr("class","layui-tab-title");
@@ -581,6 +591,7 @@
                 case "l3":
                     $("#profile").removeClass("layui-show").addClass("layui-hide");
                     $(".layui-tab").removeClass("layui-hide");
+                    $("#cite")[0].innerText="TCP记录";
                     var exist = $("#t1").length;
                     if (exist == 0) {
                         $("#laytab").attr("class","layui-tab-title");
@@ -606,11 +617,13 @@
         $(document).on("click",'#profile_info',function () {
             $(".layui-tab").addClass("layui-hide");
             $("#profile").removeClass("layui-hide").addClass("layui-show");
+            $("#cite")[0].innerText="用户信息";
         });
 
         $(document).on("click",'.dashboard',function () {
             $("#profile").removeClass("layui-show").addClass("layui-hide");
             $(".layui-tab").removeClass("layui-hide");
+            $("#cite")[0].innerText="控制面板";
         });
 
     });

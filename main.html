@@ -61,7 +61,7 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <!--面包屑页面-->
-        <div lay-filter="bread" style="padding: 10px 10px;">
+        <div lay-filter="bread" style="padding: 15px 15px;">
             <span class="layui-breadcrumb" lay-separator=">">
               <a href="">DNSLog平台</a>
               <a><cite id="cite">用户信息</cite></a>
@@ -434,6 +434,7 @@
                 , {field: 'src_addr', title: '源IP', sort: true, edit: 'text'}
                 , {field: 'src_port', title: '源端口', sort: true, edit: 'text'}
                 , {field: 'dst_addr', title: '请求目标', edit: 'text'}
+                , {field: 'dst_port', title: '目标端口', edit: 'text'}
                 , {field: 'content', title: '请求内容', edit: 'text'}
                 , {field: 'date', title: '请求时间', edit: 'text'}
                 , {fixed: 'right', title: '操作', toolbar: '#tcpAction', width: 120}
